@@ -9,10 +9,8 @@ public class Pharmacy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long cnpj;
-
     @Column(nullable = false)
     private String companyName;
-
     @Column(nullable = false)
     private String tradingName;
     @Column(nullable = false)
@@ -24,6 +22,7 @@ public class Pharmacy {
     private Address address;
 
     public Pharmacy() {
+        this.address = new Address();
     }
 
     @Override
