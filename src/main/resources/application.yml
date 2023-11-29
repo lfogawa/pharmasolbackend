@@ -9,22 +9,10 @@ spring:
     username: postgres
     password: 1996
   jpa:
-    defer-datasource-initialization: true
-    database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     hibernate:
-      ddl:
-        auto: update
-    sql:
-      init:
-        mode: always
-
-  jackson:
-    default-property-inclusion: NON_NULL
-  sql:
-    init:
-      platform: postgres
+      ddl-auto: update
