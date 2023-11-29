@@ -1,5 +1,6 @@
 package com.devinhouse.pharmasol.service;
 
+import com.devinhouse.pharmasol.dtos.PharmacyResponse;
 import com.devinhouse.pharmasol.model.Pharmacy;
 import com.devinhouse.pharmasol.repository.PharmacyRepository;
 import org.hibernate.query.Page;
