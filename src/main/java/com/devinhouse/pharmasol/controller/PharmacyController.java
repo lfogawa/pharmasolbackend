@@ -20,7 +20,7 @@ public class PharmacyController {
     private PharmacyService pharmacyService;
 
     @GetMapping
-    public ResponseEntity<Page<PharmacyResponse>> list(@PageableDefault(size=12, sort = "name") Pageable pageable){
+    public ResponseEntity<Page<PharmacyResponse>> list(@PageableDefault(size=12, sort = "companyName") Pageable pageable){
         Page<PharmacyResponse> response = this.pharmacyService.listAll(pageable);
         return ResponseEntity.ok(response);
     }
