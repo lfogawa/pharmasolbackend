@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,12 @@ public class PharmacyController {
     @GetMapping("/{cnpj}")
     public ResponseEntity<PharmacyResponse> getByCnpj(@PathVariable("cnpj") Long cnpj){
         PharmacyResponse response = this.pharmacyService.getPharmacy(cnpj);
-        return ResponseEntity.ok(response);
+
+        if (response != null) {
+            return ResponseEntity.ok(response);
+        } else {
+            String errorMessage = "Pharmacy with CNPJ " + cnpj + " not found.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        }
     }
 }
