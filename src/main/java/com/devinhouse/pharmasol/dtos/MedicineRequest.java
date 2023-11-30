@@ -1,52 +1,27 @@
-package com.devinhouse.pharmasol.model;
+package com.devinhouse.pharmasol.dtos;
 
 import com.devinhouse.pharmasol.model.enums.MedicineType;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "MEDICINE")
-public class Medicine {
-    @Id
-    @Column(nullable = false)
+public class MedicineRequest {
+    @NotNull
     private Integer registerNumber;
-    @Column(nullable = false)
+    @NotBlank
     private String name;
-    @Column(nullable = false)
+    @NotBlank
     private String laboratory;
-    @Column(nullable = false)
+    @NotBlank
     private String dosage;
     private String description;
-    @Column(nullable = false)
+    @NotNull
     private Float price;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @NotNull
     private MedicineType medicineType;
-
-    public Medicine() {
-    }
-
-    public Medicine(Integer registerNumber, String name, String laboratory, String dosage, String description, Float price, MedicineType medicineType) {
-        this.registerNumber = registerNumber;
-        this.name = name;
-        this.laboratory = laboratory;
-        this.dosage = dosage;
-        this.description = description;
-        this.price = price;
-        this.medicineType = medicineType;
-    }
-
-    @Override
-    public String toString() {
-        return "Medicine{" +
-                "registerNumber=" + registerNumber +
-                ", name='" + name + '\'' +
-                ", laboratory='" + laboratory + '\'' +
-                ", dosage='" + dosage + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", medicineType=" + medicineType +
-                '}';
-    }
 
     public Integer getRegisterNumber() {
         return registerNumber;
