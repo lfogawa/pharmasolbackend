@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/pharmacies")
 public class PharmacyController {
@@ -29,13 +31,12 @@ public class PharmacyController {
 
     @GetMapping("/{cnpj}")
     public ResponseEntity<PharmacyResponse> getByCnpj(@PathVariable("cnpj") Long cnpj){
-        PharmacyResponse response = this.pharmacyService.getPharmacy(cnpj);
+        Optional<PharmacyResponse> response = this.pharmacyService.getPharmacy(cnpj);
 
-        if (response != null) {
-            return ResponseEntity.ok(response);
+        if (response.isPresent()) {
+            return ResponseEntity.ok(response.get());
         } else {
-            String errorMessage = "Pharmacy with CNPJ " + cnpj + " not found.";
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+            return ResponseEntity.notFound().build();
         }
     }
 }
