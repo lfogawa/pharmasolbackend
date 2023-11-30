@@ -21,5 +21,8 @@ public class PharmacyService {
         return this.pharmacyRepository.findAll(pageable).map(PharmacyResponse::new);
     }
 
-
+    public PharmacyResponse getPharmacy(Long cnpj){
+        return this.pharmacyRepository.findById(cnpj).map(PharmacyResponse::new)
+                .orElseThrow(() -> new IllegalArgumentException("Pharmacy with cnpj not found: " + cnpj));
+    }
 }
