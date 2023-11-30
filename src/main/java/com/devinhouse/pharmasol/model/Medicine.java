@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 @Table(name = "MEDICINE")
 public class Medicine {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer registerNumber;
     @Column(nullable = false)
