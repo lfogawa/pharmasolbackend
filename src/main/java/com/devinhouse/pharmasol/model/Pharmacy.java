@@ -1,5 +1,6 @@
 package com.devinhouse.pharmasol.model;
 
+import com.devinhouse.pharmasol.dtos.PharmacyRequest;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,14 +15,24 @@ public class Pharmacy {
     private String tradingName;
     @Column(nullable = false)
     private String email;
-    @Column(nullable = false)
     private String landlineCellphone;
+    @Column(nullable = false)
     private String cellphone;
     @Embedded
     private Address address;
 
     public Pharmacy() {
         this.address = new Address();
+    }
+
+    public Pharmacy(Long cnpj, String companyName, String tradingName, String email, String landlineCellphone, String cellphone, Address address) {
+        this.cnpj = cnpj;
+        this.companyName = companyName;
+        this.tradingName = tradingName;
+        this.email = email;
+        this.landlineCellphone = landlineCellphone;
+        this.cellphone = cellphone;
+        this.address = address;
     }
 
     @Override

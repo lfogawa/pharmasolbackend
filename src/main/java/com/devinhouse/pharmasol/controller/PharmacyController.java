@@ -1,18 +1,17 @@
 package com.devinhouse.pharmasol.controller;
 
+import com.devinhouse.pharmasol.dtos.PharmacyRequest;
 import com.devinhouse.pharmasol.dtos.PharmacyResponse;
 import com.devinhouse.pharmasol.model.Pharmacy;
 import com.devinhouse.pharmasol.service.PharmacyService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -37,6 +36,16 @@ public class PharmacyController {
             return ResponseEntity.ok(response.get());
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody @Valid PharmacyRequest body){
+        try {
+            PharmacyResponse response = this.pharmacyService.create(body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

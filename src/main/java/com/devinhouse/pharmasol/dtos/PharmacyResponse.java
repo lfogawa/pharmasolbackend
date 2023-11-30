@@ -12,5 +12,4 @@ public record PharmacyResponse (@NotNull Long cnpj, @NotBlank String companyName
         this(pharmacy.getCnpj(), pharmacy.getCompanyName(), pharmacy.getTradingName(), pharmacy.getEmail(),
                 pharmacy.getLandlineCellphone(), pharmacy.getCellphone(), pharmacy.getAddress());
     }
-
 }
