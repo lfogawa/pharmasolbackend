@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class PharmacyService {
     @Autowired
@@ -23,6 +25,6 @@ public class PharmacyService {
 
     public PharmacyResponse getPharmacy(Long cnpj){
         return this.pharmacyRepository.findById(cnpj).map(PharmacyResponse::new)
-                .orElseThrow(() -> new IllegalArgumentException("Pharmacy with cnpj not found: " + cnpj));
+                .orElseThrow(() -> new NoSuchElementException("Pharmacy with cnpj not found: " + cnpj));
     }
 }
