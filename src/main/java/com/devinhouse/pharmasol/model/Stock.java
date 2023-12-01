@@ -3,6 +3,7 @@ package com.devinhouse.pharmasol.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Entity
 @Table(name = "STOCK")
@@ -18,6 +19,14 @@ public class Stock {
     private Integer quantity;
     @Column(nullable = false)
     private LocalDateTime updateDate;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "registerNumber", referencedColumnName = "registerNumber")
+    private Medicine medicine;
+
+    @ManyToOne
+    @JoinColumn(name = "cnpj", referencedColumnName = "cnpj")
+    private Pharmacy pharmacy;
 
     public Stock() {
     }
@@ -62,5 +71,13 @@ public class Stock {
 
     public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
+    public Pharmacy getPharmacy() {
+        return pharmacy;
     }
 }

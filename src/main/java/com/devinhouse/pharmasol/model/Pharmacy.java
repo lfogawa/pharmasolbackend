@@ -3,6 +3,8 @@ package com.devinhouse.pharmasol.model;
 import com.devinhouse.pharmasol.dtos.PharmacyRequest;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "PHARMACY")
 public class Pharmacy {
@@ -20,6 +22,23 @@ public class Pharmacy {
     private String cellphone;
     @Embedded
     private Address address;
+
+    @OneToMany(mappedBy = "pharmacy")
+    private List<Stock> stocks;
+
+    @ManyToMany
+    @JoinTable(name = "PHARMACY_MEDICINE",
+            joinColumns = @JoinColumn(name = "cnpj"),
+            inverseJoinColumns = @JoinColumn(name = "registerNumber"))
+    private List<Medicine> medicines;
+
+    public List<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
+    }
 
     public Pharmacy() {
         this.address = new Address();
@@ -103,4 +122,5 @@ public class Pharmacy {
     public void setAddress(Address address) {
         this.address = address;
     }
+
 }

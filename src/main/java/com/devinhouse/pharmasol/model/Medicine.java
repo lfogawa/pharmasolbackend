@@ -3,6 +3,8 @@ package com.devinhouse.pharmasol.model;
 import com.devinhouse.pharmasol.model.enums.MedicineType;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "MEDICINE")
 public class Medicine {
@@ -22,6 +24,10 @@ public class Medicine {
     @Column(nullable = false)
     private MedicineType medicineType;
 
+    @OneToMany(mappedBy = "medicine")
+    private List<Stock> stocks;
+    @ManyToMany(mappedBy = "medicines")
+    private List<Pharmacy> pharmacies;
     public Medicine() {
     }
 
