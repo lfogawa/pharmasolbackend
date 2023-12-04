@@ -2,13 +2,14 @@ package com.devinhouse.pharmasol.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Table(name = "STOCK")
 @IdClass(IdStock.class)
-public class Stock {
+public class Stock implements Serializable {
     @Id
     @Column(nullable = false)
     private Long cnpj;
@@ -21,11 +22,11 @@ public class Stock {
     private LocalDateTime updateDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "registerNumber", referencedColumnName = "registerNumber")
+    @JoinColumn(name = "registerNumber", referencedColumnName = "registerNumber", insertable = false, updatable = false)
     private Medicine medicine;
 
-    @ManyToOne
-    @JoinColumn(name = "cnpj", referencedColumnName = "cnpj")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cnpj", referencedColumnName = "cnpj", insertable = false, updatable = false)
     private Pharmacy pharmacy;
 
     public Stock() {
@@ -39,6 +40,14 @@ public class Stock {
                 ", quantity=" + quantity +
                 ", updateDate=" + updateDate +
                 '}';
+    }
+
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
+    }
+
+    public void setPharmacy(Pharmacy pharmacy) {
+        this.pharmacy = pharmacy;
     }
 
     public Long getCnpj() {
@@ -79,5 +88,8 @@ public class Stock {
 
     public Pharmacy getPharmacy() {
         return pharmacy;
+    }
+
+    public void save(Stock newStock) {
     }
 }
