@@ -21,11 +21,11 @@ public class Stock implements Serializable {
     @Column(nullable = false)
     private LocalDateTime updateDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "registerNumber", referencedColumnName = "registerNumber", insertable = false, updatable = false)
     private Medicine medicine;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "cnpj", referencedColumnName = "cnpj", insertable = false, updatable = false)
     private Pharmacy pharmacy;
 

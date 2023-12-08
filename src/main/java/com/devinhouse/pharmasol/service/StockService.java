@@ -1,6 +1,7 @@
 package com.devinhouse.pharmasol.service;
 
 import com.devinhouse.pharmasol.dtos.StockResponse;
+import com.devinhouse.pharmasol.exception.ValidationException;
 import com.devinhouse.pharmasol.repository.PharmacyRepository;
 import com.devinhouse.pharmasol.repository.MedicineRepository;
 import com.devinhouse.pharmasol.model.Medicine;
@@ -82,4 +83,33 @@ public class StockService {
         return stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber)
                 .map(StockResponse::new);
     }
+
+    @Transactional
+    public Optional<StockResponse> sellMedicine(Long cnpj, Integer registerNumber, Integer quantity) {
+        Optional<Stock> existingStock = stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber);
+
+        if (existingStock.isPresent()) {
+            Stock stock = existingStock.get();
+            int newQuantity = stock.getQuantity() - quantity;
+
+            if (newQuantity < 0) {
+                throw new ValidationException("Cannot sell more than the available quantity in stock.");
+            } else {
+                stock.setQuantity(newQuantity);
+                stock.setUpdateDate(LocalDateTime.now());
+                stockRepository.save(stock);
+
+                if (newQuantity == 0) {
+                    stockRepository.delete(stock);
+                    return Optional.of(new StockResponse(stock));
+                }
+            }
+        } else {
+            throw new ValidationException("There's no existing stock for the specified pharmacy and medicine.");
+        }
+
+        return stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber)
+                .map(StockResponse::new);
+    }
+
 }

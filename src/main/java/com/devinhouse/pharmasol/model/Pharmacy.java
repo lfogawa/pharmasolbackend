@@ -23,7 +23,7 @@ public class Pharmacy {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "pharmacy")
+    @OneToMany(mappedBy = "pharmacy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stock> stocks;
 
     @ManyToMany

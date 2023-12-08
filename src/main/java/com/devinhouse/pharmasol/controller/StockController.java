@@ -53,6 +53,28 @@ public class StockController {
         }
     }
 
+    @DeleteMapping
+    public ResponseEntity<StockResponse> sellMedicine(@RequestBody StockRequest stockRequest) {
+        try {
+            validateRequest(stockRequest);
+
+            Optional<StockResponse> stockResponseOptional = stockService.sellMedicine(
+                    stockRequest.getCnpj(),
+                    stockRequest.getRegisterNumber(),
+                    stockRequest.getQuantity()
+            );
+
+            if (stockResponseOptional.isPresent()) {
+                StockResponse stock = stockResponseOptional.get();
+                return ResponseEntity.ok(stock);
+            }
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StockResponse(e.getMessage()));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StockResponse());
+    }
+
     private void validateRequest(StockRequest stockRequest) throws ValidationException {
         if (stockRequest.getCnpj() == null || stockRequest.getRegisterNumber() == null || stockRequest.getQuantity() == null) {
             throw new ValidationException("All fields are obligatory.");
@@ -62,6 +84,4 @@ public class StockController {
             throw new ValidationException("Quantity must be an positive number, bigger than zero.");
         }
     }
-
-
 }

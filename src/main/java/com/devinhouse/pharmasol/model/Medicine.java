@@ -24,7 +24,7 @@ public class Medicine {
     @Column(nullable = false)
     private MedicineType medicineType;
 
-    @OneToMany(mappedBy = "medicine")
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stock> stocks;
     @ManyToMany(mappedBy = "medicines")
     private List<Pharmacy> pharmacies;
