@@ -3,11 +3,11 @@ package com.devinhouse.pharmasol.service;
 import com.devinhouse.pharmasol.dtos.PharmacyRequest;
 import com.devinhouse.pharmasol.dtos.PharmacyResponse;
 import com.devinhouse.pharmasol.exception.PharmacyNotFoundException;
+import com.devinhouse.pharmasol.exception.ValidationException;
 import com.devinhouse.pharmasol.model.Pharmacy;
 import com.devinhouse.pharmasol.repository.PharmacyRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,13 @@ public class PharmacyService {
         pharmacyRepository.save(pharmacy);
     }
 
-    public Page<PharmacyResponse> listAll(Pageable pageable){
-        return this.pharmacyRepository.findAll(pageable).map(PharmacyResponse::new);
+    public Page<PharmacyResponse> listAll(Pageable pageable) {
+        if (pageable == null) {
+            throw new IllegalArgumentException("Pageable is null.");
+        } else {
+            return this.pharmacyRepository.findAll(pageable)
+                    .map(PharmacyResponse::new);
+        }
     }
 
     public Optional<PharmacyResponse> getPharmacy(Long cnpj) {
