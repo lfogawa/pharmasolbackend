@@ -10,8 +10,15 @@ import jakarta.validation.constraints.NotNull;
 public record PharmacyResponse (@NotNull Long cnpj, @NotBlank String companyName, @NotBlank String tradingName,
                                 @NotBlank String email, @NotBlank String landlinecellphone, @NotBlank String cellphone, Address address) {
 
-    public PharmacyResponse(Pharmacy pharmacy){
-        this(pharmacy.getCnpj(), pharmacy.getCompanyName(), pharmacy.getTradingName(), pharmacy.getEmail(),
-                pharmacy.getLandlineCellphone(), pharmacy.getCellphone(), pharmacy.getAddress());
+    public PharmacyResponse(Pharmacy pharmacy) {
+        this(
+                pharmacy.getCnpj(),
+                pharmacy.getCompanyName(),
+                pharmacy.getTradingName(),
+                pharmacy.getEmail(),
+                pharmacy.getLandlineCellphone(),
+                pharmacy.getCellphone(),
+                pharmacy.getAddress()
+        );
     }
 }
