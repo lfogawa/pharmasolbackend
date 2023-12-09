@@ -75,6 +75,38 @@ public class StockController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StockResponse());
     }
 
+    @PutMapping
+    public ResponseEntity<StockResponse> exchangeMedicine(@RequestBody StockRequest stockRequest) {
+        try {
+            validateRequestExchangeMedicine(stockRequest);
+
+            Optional<StockResponse> stockResponseOptional = stockService.exchangeMedicine(
+                    stockRequest.getCnpjOrigin(),
+                    stockRequest.getCnpjDestiny(),
+                    stockRequest.getRegisterNumber(),
+                    stockRequest.getQuantity()
+            );
+
+            if (stockResponseOptional.isPresent()) {
+                StockResponse stock = stockResponseOptional.get();
+                return ResponseEntity.status(HttpStatus.CREATED).body(stock);
+            } else {
+                return ResponseEntity.status(HttpStatus.CREATED).body(null);
+            }
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StockResponse(e.getMessage()));
+        }
+    }
+
+    private void validateRequestExchangeMedicine(StockRequest stockRequest) throws ValidationException {
+        if (stockRequest.getCnpjOrigin() == null || stockRequest.getCnpjDestiny() == null || stockRequest.getRegisterNumber() == null || stockRequest.getQuantity() == null) {
+            throw new ValidationException("All fields are obligatory.");
+        }
+
+        if (stockRequest.getQuantity() <= 0) {
+            throw new ValidationException("Quantity must be an positive number, bigger than zero.");
+        }
+    }
     private void validateRequest(StockRequest stockRequest) throws ValidationException {
         if (stockRequest.getCnpj() == null || stockRequest.getRegisterNumber() == null || stockRequest.getQuantity() == null) {
             throw new ValidationException("All fields are obligatory.");

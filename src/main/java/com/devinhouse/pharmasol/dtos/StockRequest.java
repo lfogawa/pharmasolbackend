@@ -1,29 +1,54 @@
 package com.devinhouse.pharmasol.dtos;
 
 import com.devinhouse.pharmasol.model.Stock;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StockRequest {
+    private Long cnpjOrigin;
+    private Long cnpjDestiny;
     private Long cnpj;
     private Integer registerNumber;
-
     private Integer quantity;
-
     private LocalDateTime updateDate;
-
+    private String name;
 
     public StockRequest() {
     }
 
     public StockRequest(Stock stock) {
         this.cnpj = stock.getCnpj();
+        this.name = stock.getMedicine().getName();
         this.registerNumber = stock.getRegisterNumber();
         this.quantity = stock.getQuantity();
+        this.updateDate = LocalDateTime.now();
+    }
+
+    public StockRequest(Long cnpjOrigin, Long cnpjDestiny, Integer registerNumber, Integer quantity) {
+        this.cnpjOrigin = cnpjOrigin;
+        this.cnpjDestiny = cnpjDestiny;
+        this.registerNumber = registerNumber;
+        this.quantity = quantity;
+    }
+
+    public StockRequest(Long cnpj, Integer registerNumber, Integer quantity) {
+        this.cnpj = cnpj;
+        this.registerNumber = registerNumber;
+        this.quantity = quantity;
     }
 
     public Long getCnpj() {
         return cnpj;
+    }
+
+    public Long getCnpjOrigin() {
+        return cnpjOrigin;
+    }
+
+    public Long getCnpjDestiny() {
+        return cnpjDestiny;
     }
 
     public Integer getRegisterNumber() {
@@ -45,5 +70,4 @@ public class StockRequest {
     public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
-
 }
