@@ -1,21 +1,23 @@
 package com.devinhouse.pharmasol.dtos;
 
 import com.devinhouse.pharmasol.model.Address;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class PharmacyRequest{
-    @NotNull
-    Long cnpj;
-    @NotBlank
-    String companyName;
-    @NotBlank
-    String tradingName;
-    @NotBlank
-    String email;
-    String landlineCellphone;
-    @NotBlank
-    String cellphone;
+    @NotNull(message = "{required.field}")
+    private Long cnpj;
+    @NotBlank(message = "{required.field}")
+    private String companyName;
+    @NotBlank(message = "{required.field}")
+    private String tradingName;
+    @NotBlank(message = "{required.field}")
+    @Email(message = "{invalid.field}")
+    private String email;
+    private String landlineCellphone;
+    @NotBlank(message = "{required.field}")
+    private String cellphone;
     Address address;
 
     public Long getCnpj() {

@@ -47,11 +47,17 @@ public class PharmacyService {
     @Transactional
     public PharmacyResponse create(PharmacyRequest request) {
         if (pharmacyRepository.existsById(request.getCnpj())) {
-            throw new IllegalArgumentException("Pharmacy with CNPJ already exists: " + request.getCnpj());
+            throw new IllegalArgumentException("Pharmacy with CNPJ " + request.getCnpj() + " already exists.");
         }
 
-        Pharmacy pharmacy = new Pharmacy(request.getCnpj(), request.getCompanyName(), request.getTradingName(),
-                request.getEmail(), request.getLandlineCellphone(), request.getCellphone(), request.getAddress());
+        Pharmacy pharmacy = new Pharmacy(
+                request.getCnpj(),
+                request.getCompanyName(),
+                request.getTradingName(),
+                request.getEmail(),
+                request.getLandlineCellphone(),
+                request.getCellphone(),
+                request.getAddress());
 
         pharmacyRepository.save(pharmacy);
 

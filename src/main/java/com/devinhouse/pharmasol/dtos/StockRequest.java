@@ -2,15 +2,21 @@ package com.devinhouse.pharmasol.dtos;
 
 import com.devinhouse.pharmasol.model.Stock;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StockRequest {
+    @NotNull(message = "{required.field}")
     private Long cnpjOrigin;
+    @NotNull(message = "{required.field}")
     private Long cnpjDestiny;
+    @NotNull(message = "{required.field}")
     private Long cnpj;
+    @NotNull(message = "{required.field}")
     private Integer registerNumber;
+    @NotNull(message = "{required.field}")
     private Integer quantity;
     private LocalDateTime updateDate;
     private String name;

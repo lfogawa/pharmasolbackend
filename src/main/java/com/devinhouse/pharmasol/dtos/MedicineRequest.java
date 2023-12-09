@@ -8,19 +8,19 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class MedicineRequest {
-    @NotNull
+    @NotNull(message = "{required.field}")
     private Integer registerNumber;
-    @NotBlank
+    @NotBlank(message = "{required.field}")
     private String name;
-    @NotBlank
+    @NotBlank(message = "{required.field}")
     private String laboratory;
-    @NotBlank
+    @NotBlank(message = "{required.field}")
     private String dosage;
     private String description;
-    @NotNull
+    @NotNull(message = "{required.field}")
     private Float price;
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "{required.field}")
     private MedicineType medicineType;
 
     public Integer getRegisterNumber() {
