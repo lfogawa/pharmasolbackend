@@ -2,10 +2,12 @@ package com.devinhouse.pharmasol.service;
 
 import com.devinhouse.pharmasol.dtos.PharmacyRequest;
 import com.devinhouse.pharmasol.dtos.PharmacyResponse;
+import com.devinhouse.pharmasol.exception.PharmacyNotFoundException;
 import com.devinhouse.pharmasol.model.Pharmacy;
 import com.devinhouse.pharmasol.repository.PharmacyRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +31,12 @@ public class PharmacyService {
         return this.pharmacyRepository.findAll(pageable).map(PharmacyResponse::new);
     }
 
-    public Optional<PharmacyResponse> getPharmacy(Long cnpj){
-        return this.pharmacyRepository.findById(cnpj).map(PharmacyResponse::new);
+    public Optional<PharmacyResponse> getPharmacy(Long cnpj) {
+        if (pharmacyRepository.existsById(cnpj)) {
+            return pharmacyRepository.findById(cnpj).map(PharmacyResponse::new);
+        } else {
+            throw new PharmacyNotFoundException("Pharmacy with CNPJ " + cnpj + " does not exist.");
+        }
     }
 
     @Transactional
