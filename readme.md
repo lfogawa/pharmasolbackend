@@ -85,7 +85,7 @@ quanto aos estoques: consultar, adquirir e vender medicamentos de determinada fa
   EN-US
 </p>
 
-📌 Initial Data Load.<br>
+📌 Initial data load.<br>
 ✔️ Service responsible for populating initial data into tables.<br>
 - Endpoint: HTTP POST ⇒ /initialization<br>
 - Request: no request body or parameters<br>
@@ -93,7 +93,8 @@ quanto aos estoques: consultar, adquirir e vender medicamentos de determinada fa
 
 <br>
 
-📌 Pharmacy Query.<br>
+📌 Pharmacy query.<br>
+✔️ Service for querying all pharmacies registered in the system.<br>
 - Endpoint: HTTP GET ⇒ /pharmacies<br>
 - Request: no request body or parameters<br>
 - Response: HTTP 200 OK, with a list of pharmacies<br>
@@ -101,7 +102,7 @@ Successful response fields: cnpj, companyName, tradingName, email, landlineCellp
 
 <br>
 
-📌 Pharmacy Query by CNPJ.<br>
+📌 Pharmacy query by CNPJ.<br>
 ✔️ Pharmacy query service by its CNPJ.<br>
 - Endpoint: HTTP GET ⇒ /pharmacies/{cnpj}<br>
 - Request: no request body<br>
@@ -112,7 +113,7 @@ Successful response fields: cnpj, companyName, tradingName, email, landlineCellp
 
 <br>
 
-📌 Pharmacy Inclusion.<br>
+📌 Pharmacy inclusion.<br>
 ✔️ New pharmacy registration service.<br>
 - Endpoint: HTTP POST ⇒ /pharmacies<br>
 - Request:<br>
@@ -124,7 +125,7 @@ Successful response fields: same fields as the request.<br>
 
 <br>
 
-📌 Medicines Query.<br>
+📌 Medicines query.<br>
 ✔️ Query service for all medicines registered in the system.<br>
 - Endpoint: HTTP GET ⇒ /medicines<br>
 - Request: no request body or parameters<br>
@@ -132,7 +133,7 @@ Successful response fields: same fields as the request.<br>
 
 <br>
 
-📌 Medication Inclusion.<br>
+📌 Medication inclusion.<br>
 ✔️ New medication registration service.<br>
 - Endpoint: HTTP POST ⇒ /medicines<br>
 - Request:<br>
@@ -144,7 +145,7 @@ Successful response fields: same fields as the request<br>
 
 <br>
 
-📌 Pharmacy Stock Query.<br>
+📌 Pharmacy stock query.<br>
 ✔️ Query service for the stock of medicines in a specific pharmacy.<br>
 - Endpoint: HTTP GET ⇒ /stocks/{cnpj}<br>
 - Request: no request body or parameters<br>
@@ -153,7 +154,7 @@ Response fields: list with registerNumber, name, quantity, updateDate<br>
 
 <br>
 
-📌 Acquisition of Medicines for Pharmacy Stock.<br>
+📌 Acquisition of medicines for pharmacy stock.<br>
 ✔️ Inclusion service for medicines in the pharmacy's stock. When the pharmacy purchases medicines from suppliers, the respective quantities must be added to the stock.<br>
 - Endpoint: HTTP POST ⇒ /stocks<br>
 - Request:<br>
@@ -165,7 +166,7 @@ Successful response fields: cnpj, registerNumber, quantity, updateDate<br>
 
 <br>
 
-📌 Sale of Medicines with Pharmacy Stock Update.<br>
+📌 Sale of medicines with pharmacy stock update.<br>
 ✔️ Service for recording the sale of medicines with the necessary update in the pharmacy's stock. When the pharmacy sells medicines to customers, the respective quantities must be reduced from the stock.<br>
 - Endpoint: HTTP DELETE ⇒ /stocks<br>
 - Request:<br>
@@ -177,7 +178,7 @@ Successful response fields: cnpj, registerNumber, quantity, updateDate<br>
 
 <br>
 
-📌 Exchange of Medicines between Pharmacy Stocks.<br>
+📌 Exchange of medicines between pharmacy stocks.<br>
 ✔️ Service to record the exchange of medicines between pharmacies, to balance their stocks when necessary. The exchange of medicines involves decreasing the quantity of a particular medicine from the source pharmacy and adding this quantity to the destination pharmacy. The stocks of both pharmacies must be updated and reflect the final quantity after the exchange.<br>
 - Endpoint: HTTP PUT ⇒ /stocks<br>
 - Request:<br>
@@ -195,20 +196,21 @@ Successful response fields: registerNumber, cnpjOrigin, quantityOrigin, cnpjDest
 </p>
 
 📌 Carga inicial de dados.<br>
-✔️ Serviço responsável por popular dados iniciais nas tabelas. <br>
+✔️ Serviço responsável por popular dados iniciais nas tabelas.<br>
 - Endpoint: HTTP POST ⇒ /initialization<br>
 - Request: Sem request body ou parâmetros<br>
 - Response: HTTP 200 OK (sem response body)<br>
 <br>
 
-📌 Consulta de Farmácias.<br>
+📌 Consulta de farmácias.<br>
+✔️ Serviço de consulta de todas as farmácias cadastradas no sistema.<br>
 - Endpoint: HTTP GET ⇒ /pharmacies<br>
 - Request: Sem request body ou parâmetros<br>
 - Response: HTTP 200 OK, com lista das pharmacies<br>
 Campos de response com sucesso: cnpj, companyName, tradingName, email, landlineCellphone, cellphone e address, onde endereco contêm campos: zipCode, street, number, neighborhood, city, state, complement, latitude, longitude<br>
 <br>
 
-📌 Consulta de Farmácia pelo CNPJ .<br>
+📌 Consulta de farmácia pelo CNPJ .<br>
 ✔️ Serviço de consulta de farmácia pelo seu CNPJ.<br>
 - Endpoint: HTTP GET ⇒ /farmacias/{cnpj}<br>
 - Request: Sem request body<br>
@@ -219,7 +221,7 @@ Campos de response com sucesso: cnpj, companyName, tradingName, email, landlineC
 
 <br>
 
-📌 Inclusão de Farmácia.<br>
+📌 Inclusão de farmácia.<br>
 ✔️ Serviço de cadastro de nova farmácia.<br>
 - Endpoint: HTTP POST ⇒ /pharmacies<br>
 - Request:<br>
@@ -231,7 +233,7 @@ Campos de response com sucesso: mesmos campos da request.<br>
 
 <br>
 
-📌 Consulta de Medicamentos.<br>
+📌 Consulta de medicamentos.<br>
 ✔️ Serviço de consulta de todos os medicamentos cadastrados no sistema.<br>
 - Endpoint: HTTP GET ⇒ /medicines<br>
 - Request: Sem request body ou parâmetros<br>
@@ -239,7 +241,7 @@ Campos de response com sucesso: mesmos campos da request.<br>
 
 <br>
 
-📌 Inclusão de Medicamento.<br>
+📌 Inclusão de medicamento.<br>
 ✔️ Serviço de cadastro de novo medicamento.<br>
 - Endpoint: HTTP POST ⇒ /medicines<br>
 - Request:<br>
@@ -251,7 +253,7 @@ Campos de response com sucesso: mesmos campos da request<br>
 
 <br>
 
-📌 Consulta de Estoque de Farmácia.<br>
+📌 Consulta de estoque de farmácia.<br>
 ✔️ Serviço de consulta do estoque de medicamentos de determinada farmácia.<br>
 - Endpoint: HTTP GET ⇒ /stocks/{cnpj}<br>
 - Request: Sem request body ou parâmetros<br>
@@ -260,7 +262,7 @@ Campos de response: lista com registerNumber, name, quantity, updateDate<br>
 
 <br>
 
-📌 Aquisição de Medicamentos para Estoque de farmácia.<br>
+📌 Aquisição de medicamentos para estoque de farmácia.<br>
 ✔️ Serviço de inclusão de medicamentos no estoque da farmácia. Quando a farmácia faz a compra de medicamentos dos fornecedores, devem ser adicionadas as respectivas quantidades no estoque.<br>
 - Endpoint: HTTP POST ⇒ /stocks<br>
 - Request:<br>
@@ -272,7 +274,7 @@ Campos de response com sucesso: cnpj, registerNumber, quantity, updateDate<br>
 
 <br>
 
-📌 Venda de Medicamentos com atualização do Estoque de farmácia.<br>
+📌 Venda de medicamentos com atualização do estoque de farmácia.<br>
 ✔️ Serviço de lançamento de venda de medicamentos com a devida atualização no estoque da farmácia. Quando a farmácia faz a venda de medicamentos aos clientes, devem ser reduzidas as respectivas quantidades no estoque.<br>
 - Endpoint: HTTP DELETE ⇒ /stocks<br>
 - Request:<br>
@@ -284,7 +286,7 @@ Campos de response com sucesso: cnpj, registerNumber, quantity, updateDate<br>
 
 <br>
 
-📌 Troca de Medicamentos entre Estoques de Farmácias.<br>
+📌 Troca de medicamentos entre estoques de farmácias.<br>
 ✔️ Serviço para registrar a troca de medicamentos entre as farmácias, para equilibrar os estoques entre elas quando necessário. A troca de medicamento consiste na diminuição na quantidade de determinado medicamento da farmácia origem e adição desta quantidade na farmácia destino. O estoque de ambas devem ser atualizados e refletir a quantidade final após a troca.<br>
 - Endpoint: HTTP PUT ⇒ /stocks<br>
 - Request:<br>
