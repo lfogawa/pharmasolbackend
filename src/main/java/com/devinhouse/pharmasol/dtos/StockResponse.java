@@ -45,13 +45,18 @@ public class StockResponse {
         this.quantityDestiny = quantityDestiny;
     }
 
-    public static StockResponse sellMedicineResponse(Long cnpj, Integer registerNumber, Integer quantity, LocalDateTime updateDate) {
-        StockResponse response = new StockResponse();
-        response.setCnpj(cnpj);
-        response.setRegisterNumber(registerNumber);
-        response.setQuantity(quantity);
-        response.setUpdateDate(updateDate);
-        return response;
+    public StockResponse(Long cnpj, Integer registerNumber, int newQuantity, LocalDateTime updateDate) {
+        this.setCnpj(cnpj);
+        this.setRegisterNumber(registerNumber);
+        this.setQuantity(newQuantity);
+        this.setUpdateDate(LocalDateTime.now());
+    }
+
+    public StockResponse(Long cnpj, Integer registerNumber, Integer quantity, LocalDateTime updateDate) {
+        this.setCnpj(cnpj);
+        this.setRegisterNumber(registerNumber);
+        this.setQuantity(quantity);
+        this.setUpdateDate(LocalDateTime.now());
     }
 
     public StockResponse(String errorMessage) {

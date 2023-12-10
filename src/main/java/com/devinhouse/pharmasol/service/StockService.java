@@ -119,15 +119,26 @@ public class StockService {
             if (newQuantity < 0) {
                 throw new ValidationException("Cannot sell more than the available quantity in stock.");
             } else {
-                stock.setQuantity(newQuantity);
-                stock.setUpdateDate(LocalDateTime.now());
-                stockRepository.save(stock);
-
                 if (newQuantity == 0) {
                     stockRepository.delete(stock);
-                    return Optional.of(StockResponse.sellMedicineResponse(cnpj, registerNumber, quantity, LocalDateTime.now()));
+                    StockResponse responseAfterDeletion = new StockResponse(
+                            cnpj,
+                            registerNumber,
+                            0,
+                            LocalDateTime.now()
+                    );
+                    return Optional.of(responseAfterDeletion);
                 } else {
-                    return Optional.of(StockResponse.sellMedicineResponse(cnpj, registerNumber, quantity, LocalDateTime.now()));
+                    stock.setQuantity(newQuantity);
+                    stock.setUpdateDate(LocalDateTime.now());
+                    stockRepository.save(stock);
+
+                    return Optional.of(new StockResponse(
+                            cnpj,
+                            registerNumber,
+                            newQuantity,
+                            stock.getUpdateDate()
+                    ));
                 }
             }
         } else {
