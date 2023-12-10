@@ -2,6 +2,7 @@ package com.devinhouse.pharmasol.service;
 
 import com.devinhouse.pharmasol.dtos.PharmacyRequest;
 import com.devinhouse.pharmasol.dtos.PharmacyResponse;
+import com.devinhouse.pharmasol.exception.IllegalPageableException;
 import com.devinhouse.pharmasol.exception.PharmacyNotFoundException;
 import com.devinhouse.pharmasol.exception.ValidationException;
 import com.devinhouse.pharmasol.model.Pharmacy;
@@ -29,8 +30,12 @@ public class PharmacyService {
 
     public Page<PharmacyResponse> listAll(Pageable pageable) {
         if (pageable == null) {
-            throw new IllegalArgumentException("Pageable is null.");
+            throw new IllegalPageableException("Pageable cannot be null.");
         } else {
+            if (pageable.getPageNumber() < 0 || pageable.getPageSize() <= 0) {
+                throw new IllegalPageableException("Invalid page number or page size.");
+            }
+
             return this.pharmacyRepository.findAll(pageable)
                     .map(PharmacyResponse::new);
         }

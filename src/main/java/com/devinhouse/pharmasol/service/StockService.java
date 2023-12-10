@@ -1,7 +1,7 @@
 package com.devinhouse.pharmasol.service;
 
 import com.devinhouse.pharmasol.dtos.StockResponse;
-import com.devinhouse.pharmasol.exception.ValidationException;
+import com.devinhouse.pharmasol.exception.*;
 import com.devinhouse.pharmasol.repository.PharmacyRepository;
 import com.devinhouse.pharmasol.repository.MedicineRepository;
 import com.devinhouse.pharmasol.model.Medicine;
@@ -70,15 +70,15 @@ public class StockService {
         }
 
         if (!pharmacyRepository.existsByCnpj(cnpj)) {
-            throw new ValidationException("Pharmacy with the specified CNPJ does not exist.");
+            throw new PharmacyNotFoundException("Pharmacy with the specified CNPJ does not exist.");
         }
 
         if (!medicineRepository.existsByRegisterNumber(registerNumber)) {
-            throw new ValidationException("Medicine with the specified register number does not exist.");
+            throw new MedicineNotFoundException("Medicine with the specified register number does not exist.");
         }
 
         if (quantity <= 0) {
-            throw new ValidationException("Quantity must be a positive number greater than zero.");
+            throw new InvalidQuantityException("Quantity must be a positive number greater than zero.");
         }
     }
 
@@ -109,7 +109,7 @@ public class StockService {
     }
 
     @Transactional
-    public Optional<StockResponse> sellMedicine(Long cnpj, Integer registerNumber, Integer quantity) {
+    public Optional<StockResponse> sellMedicine(Long cnpj, Integer registerNumber, Integer quantity) throws OutOfStockException {
         Optional<Stock> existingStock = stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber);
 
         if (existingStock.isPresent()) {
@@ -117,7 +117,7 @@ public class StockService {
             int newQuantity = stock.getQuantity() - quantity;
 
             if (newQuantity < 0) {
-                throw new ValidationException("Cannot sell more than the available quantity in stock.");
+                throw new OutOfStockException("Cannot sell more than the available quantity in stock.");
             } else {
                 if (newQuantity == 0) {
                     stockRepository.delete(stock);
@@ -142,7 +142,7 @@ public class StockService {
                 }
             }
         } else {
-            throw new ValidationException("There's no existing stock for the specified pharmacy and medicine.");
+            throw new OutOfStockException("There's no existing stock for the specified pharmacy and medicine.");
         }
     }
 
@@ -156,7 +156,7 @@ public class StockService {
             int newQuantityOrigin = stockOrigin.getQuantity() - quantity;
 
             if (newQuantityOrigin < 0) {
-                throw new ValidationException("Cannot send more than the available quantity in stock.");
+                throw new OutOfStockException("Cannot send more than the available quantity in stock.");
             } else {
                 stockOrigin.setQuantity(newQuantityOrigin);
                 stockOrigin.setUpdateDate(LocalDateTime.now());
@@ -192,7 +192,7 @@ public class StockService {
                 ));
             }
         } else {
-            throw new ValidationException("There's no existing stock for the specified pharmacy and medicine.");
+            throw new OutOfStockException("There's no existing stock for the specified pharmacy and medicine.");
         }
     }
 }

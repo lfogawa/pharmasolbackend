@@ -2,6 +2,7 @@ package com.devinhouse.pharmasol.service;
 
 import com.devinhouse.pharmasol.dtos.MedicineResponse;
 import com.devinhouse.pharmasol.dtos.MedicineRequest;
+import com.devinhouse.pharmasol.exception.MedicineAlreadyExistsException;
 import com.devinhouse.pharmasol.model.Medicine;
 import com.devinhouse.pharmasol.repository.MedicineRepository;
 import jakarta.transaction.Transactional;
@@ -26,7 +27,7 @@ public class MedicineService {
     @Transactional
     public MedicineResponse create(MedicineRequest request) {
         if (medicineRepository.existsById(request.getRegisterNumber())) {
-            throw new IllegalArgumentException("Medicine with Register Number " + request.getRegisterNumber() + " already exists.");
+            throw new MedicineAlreadyExistsException("Medicine with Register Number " + request.getRegisterNumber() + " already exists.");
         }
 
         Medicine medicine = new Medicine(
