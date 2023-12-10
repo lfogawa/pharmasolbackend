@@ -22,12 +22,14 @@ public class PharmacyController {
     @Autowired
     private PharmacyService pharmacyService;
 
+//  Return all pharmacies registered in the system with pages of size 12 and sort by companyName
     @GetMapping
     public ResponseEntity<Page<PharmacyResponse>> list(@PageableDefault(size=12, sort = "companyName") Pageable pageable){
         Page<PharmacyResponse> response = this.pharmacyService.listAll(pageable);
         return ResponseEntity.ok(response);
     }
 
+//  Return one pharmacy by its CNPJ
     @GetMapping("/{cnpj}")
     public ResponseEntity<PharmacyResponse> getByCnpj(@PathVariable("cnpj") Long cnpj){
         Optional<PharmacyResponse> response = this.pharmacyService.getPharmacy(cnpj);
@@ -39,6 +41,7 @@ public class PharmacyController {
         }
     }
 
+//  New pharmacy inclusion
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid PharmacyRequest body){
         try {

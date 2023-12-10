@@ -16,14 +16,18 @@ public class MedicineService {
     @Autowired
     private MedicineRepository medicineRepository;
 
+//  Method to save medicines when post mapping (initialization controller)
+    @Transactional
     public void save(Medicine medicine){
         medicineRepository.save(medicine);
     }
 
+//  Method to list all medicines when get mapping (medicine controller)
     public Page<MedicineResponse> listAll(Pageable pageable){
         return this.medicineRepository.findAll(pageable).map(MedicineResponse::new);
     }
 
+//  Method to create a medicine when post mapping (medicine controller)
     @Transactional
     public MedicineResponse create(MedicineRequest request) {
         if (medicineRepository.existsById(request.getRegisterNumber())) {

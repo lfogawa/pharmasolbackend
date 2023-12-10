@@ -32,6 +32,7 @@ public class StockRequest {
         this.updateDate = LocalDateTime.now();
     }
 
+//  Constructor to exchange medicine between two pharmacies stocks
     public StockRequest(Long cnpjOrigin, Long cnpjDestiny, Integer registerNumber, Integer quantity) {
         this.cnpjOrigin = cnpjOrigin;
         this.cnpjDestiny = cnpjDestiny;
@@ -39,6 +40,7 @@ public class StockRequest {
         this.quantity = quantity;
     }
 
+//  Constructor to add or sell certain medicine quantity in a pharmacy's stock
     public StockRequest(Long cnpj, Integer registerNumber, Integer quantity) {
         this.cnpj = cnpj;
         this.registerNumber = registerNumber;

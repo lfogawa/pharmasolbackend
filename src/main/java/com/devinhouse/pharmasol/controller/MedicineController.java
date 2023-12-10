@@ -18,12 +18,14 @@ public class MedicineController {
     @Autowired
     private MedicineService medicineService;
 
+//  Return all medicines registered in the system with pages of size 12 and sort by registerNumber
     @GetMapping
     public ResponseEntity<Page<MedicineResponse>> list(@PageableDefault(size=12, sort = "registerNumber") Pageable pageable){
         Page<MedicineResponse> response = this.medicineService.listAll(pageable);
         return ResponseEntity.ok(response);
     }
 
+//  New medicine inclusion
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid MedicineRequest body){
         try {

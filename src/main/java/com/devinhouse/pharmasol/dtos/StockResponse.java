@@ -30,6 +30,7 @@ public class StockResponse {
     public StockResponse() {
     }
 
+//  Constructor to return a successful get mapping (a pharmacy's stock)
     public StockResponse(Stock stock) {
         this.registerNumber = stock.getRegisterNumber();
         this.name = stock.getMedicine().getName();
@@ -37,6 +38,7 @@ public class StockResponse {
         this.updateDate = stock.getUpdateDate();
     }
 
+//  Constructor to return a successful put mapping (exchange medicine between two pharmacies stocks)
     public StockResponse(Integer registerNumber, Long cnpjOrigin, Integer quantityOrigin, Long cnpjDestiny, Integer quantityDestiny) {
         this.registerNumber = registerNumber;
         this.cnpjOrigin = cnpjOrigin;
@@ -45,6 +47,7 @@ public class StockResponse {
         this.quantityDestiny = quantityDestiny;
     }
 
+//  Constructor to return a successful delete mapping (after selling a medicine, its quantity reaches zero)
     public StockResponse(Long cnpj, Integer registerNumber, int newQuantity, LocalDateTime updateDate) {
         this.setCnpj(cnpj);
         this.setRegisterNumber(registerNumber);
@@ -52,6 +55,7 @@ public class StockResponse {
         this.setUpdateDate(LocalDateTime.now());
     }
 
+//  Constructor to return a successful post or delete mapping (add or sell medicine of a pharmacy's stock)
     public StockResponse(Long cnpj, Integer registerNumber, Integer quantity, LocalDateTime updateDate) {
         this.setCnpj(cnpj);
         this.setRegisterNumber(registerNumber);

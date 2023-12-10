@@ -26,6 +26,7 @@ public class InitializationController {
     @Autowired
     private StockService stockService;
 
+//  Initial data load: pharmacies, medicines and stocks added
     @Transactional
     @PostMapping
     public ResponseEntity<Void> initializeData(){

@@ -23,11 +23,13 @@ public class PharmacyService {
     @Autowired
     private PharmacyRepository pharmacyRepository;
 
+//  Method to save pharmacies when post mapping (initialization controller)
     @Transactional
     public void save(Pharmacy pharmacy){
         pharmacyRepository.save(pharmacy);
     }
 
+//  Method to list all pharmacies when get mapping (pharmacy controller)
     public Page<PharmacyResponse> listAll(Pageable pageable) {
         if (pageable == null) {
             throw new IllegalPageableException("Pageable cannot be null.");
@@ -41,6 +43,7 @@ public class PharmacyService {
         }
     }
 
+//  Method to return a pharmacy's data when get mapping (pharmacy controller)
     public Optional<PharmacyResponse> getPharmacy(Long cnpj) {
         if (pharmacyRepository.existsById(cnpj)) {
             return pharmacyRepository.findById(cnpj).map(PharmacyResponse::new);
@@ -49,6 +52,7 @@ public class PharmacyService {
         }
     }
 
+//  Method to create a pharmacy when post mapping (pharmacy controller)
     @Transactional
     public PharmacyResponse create(PharmacyRequest request) {
         if (pharmacyRepository.existsById(request.getCnpj())) {
