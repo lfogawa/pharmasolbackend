@@ -216,7 +216,7 @@ public class StockService {
                 ));
             }
         }
-//     If pharmacy's stock origin isn't presente, an error is shown
+//     If pharmacy's stock origin isn't present, an error is shown
         else {
             throw new OutOfStockException("There's no existing stock for the specified pharmacy and medicine.");
         }
