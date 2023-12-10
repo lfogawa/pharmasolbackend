@@ -1,0 +1,11 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg fill="#31955F" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
+
+<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+
+<g id="SVGRepo_iconCarrier"> <g> <g> <path d="M256,0C114.841,0,0,114.841,0,256s114.841,256,256,256s256-114.841,256-256S397.159,0,256,0z M364.146,300.188h-62.118 v62.118c0,25.42-20.608,46.028-46.028,46.028s-46.028-20.608-46.028-46.028v-62.118h-62.118c-25.42,0-46.028-20.608-46.028-46.028 s20.608-46.028,46.028-46.028h62.118v-62.119c0-25.42,20.608-46.028,46.028-46.028s46.028,20.608,46.028,46.028v62.118h62.118 c25.42,0,46.028,20.608,46.028,46.028C410.175,279.579,389.567,300.188,364.146,300.188z"/> </g> </g> </g>
+
+</svg>
