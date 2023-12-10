@@ -29,8 +29,14 @@ public class MedicineService {
             throw new IllegalArgumentException("Medicine with Register Number " + request.getRegisterNumber() + " already exists.");
         }
 
-        Medicine medicine = new Medicine(request.getRegisterNumber(), request.getName(), request.getLaboratory(),
-                request.getDosage(), request.getDescription(), request.getPrice(), request.getMedicineType());
+        Medicine medicine = new Medicine(
+                request.getRegisterNumber(),
+                request.getName(),
+                request.getLaboratory(),
+                request.getDosage(),
+                request.getDescription(),
+                request.getPrice(),
+                request.getMedicineType());
 
         medicineRepository.save(medicine);
 

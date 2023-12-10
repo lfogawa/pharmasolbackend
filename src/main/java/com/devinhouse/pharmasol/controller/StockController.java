@@ -44,12 +44,11 @@ public class StockController {
             if (stockResponseOptional.isPresent()) {
                 StockResponse stock = stockResponseOptional.get();
                 return ResponseEntity.status(HttpStatus.CREATED).body(stock);
-
             } else {
                 return ResponseEntity.status(HttpStatus.CREATED).body(null);
             }
         } catch (ValidationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StockResponse(e.getMessage()));
         }
     }
 
