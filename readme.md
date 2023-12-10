@@ -51,10 +51,10 @@
 The "PharmaSol" system, short for "pharmacy solutions," was created with the aim of assisting pharmaceutical companies in managing data related to pharmacies, stocks, and medicines. The technologies used (Java, Spring, Maven, and PostgreSQL) were intended to facilitate the administration and maintenance of this information, coupled with good performance.<br>
 
 In the system, it is possible to:
-initiate the database with pre-existing data for pharmacies, medicines, and stocks;<br>
-regarding pharmacies: query them (all and by CNPJ) and include them;<br>
-regarding medicines: query them and include them;<br>
-regarding stocks: query, acquire, and sell medicines from a particular pharmacy, as well as exchange medicines between the stocks of two pharmacies.<br>
+- initiate the database with pre-existing data for pharmacies, medicines, and stocks;<br>
+- regarding pharmacies: query them (all and by CNPJ) and include them;<br>
+- regarding medicines: query them and include them;<br>
+- regarding stocks: query, acquire, and sell medicines from a particular pharmacy, as well as exchange medicines between the stocks of two pharmacies.<br>
 </p>
 
 <br>
@@ -67,10 +67,10 @@ regarding stocks: query, acquire, and sell medicines from a particular pharmacy,
 O sistema "PharmaSol", abreviação de "soluções para farmácias", foi criado com o objetivo de auxiliar empresas farmacêuticas na gestão de dados envolvendo farmácias, estoques e medicamentos. As tecnologias utilizadas (Java, Spring, Maven e PostgreSQL) tiveram como finalidade realizar uma administração e uma manutenção facilitada dessas informações, aliada a uma boa perfomance.<br>
 
 No sistema, é possível:<br>
-iniciar o banco com dados prévios de farmácias, medicamentos e estoques; <br>
-quanto às farmácias: consultá-las (todas e pelo CNPJ) e incluí-las; <br>
-quanto aos medicamentos: consultá-los e incluí-los;<br>
-quanto aos estoques: consultar, adquirir e vender medicamentos de determinada farmácia, assim como trocar medicamentos entre os estoques de duas farmácias.<br>
+- iniciar o banco com dados prévios de farmácias, medicamentos e estoques; <br>
+- quanto às farmácias: consultá-las (todas e pelo CNPJ) e incluí-las; <br>
+- quanto aos medicamentos: consultá-los e incluí-los;<br>
+- quanto aos estoques: consultar, adquirir e vender medicamentos de determinada farmácia, assim como trocar medicamentos entre os estoques de duas farmácias.<br>
 </p>
 
 <p align="right">(<a href="#summary">back to top | voltar ao topo</a>)</p>
@@ -86,7 +86,7 @@ quanto aos estoques: consultar, adquirir e vender medicamentos de determinada fa
 </p>
 
 📌 Initial data load.<br>
-✔️ Service responsible for populating initial data into tables.<br>
+✔️ Service for populating initial data into tables.<br>
 - Endpoint: HTTP POST ⇒ /initialization<br>
 - Request: no request body or parameters<br>
 - Response: HTTP 200 OK (no response body)<br>
@@ -103,7 +103,7 @@ Successful response fields: cnpj, companyName, tradingName, email, landlineCellp
 <br>
 
 📌 Pharmacy query by CNPJ.<br>
-✔️ Pharmacy query service by its CNPJ.<br>
+✔️ Service for pharmacy query by its CNPJ.<br>
 - Endpoint: HTTP GET ⇒ /pharmacies/{cnpj}<br>
 - Request: no request body<br>
 - Responses:<br>
@@ -114,7 +114,7 @@ Successful response fields: cnpj, companyName, tradingName, email, landlineCellp
 <br>
 
 📌 Pharmacy inclusion.<br>
-✔️ New pharmacy registration service.<br>
+✔️ Service for new pharmacy inclusion.<br>
 - Endpoint: HTTP POST ⇒ /pharmacies<br>
 - Request:<br>
 Request body fields: cnpj, companyName, tradingName, email, landlineCellphone, cellphone, and address, where the address contains fields: zipCode, street, number, neighborhood, city, state, complement, latitude, longitude<br>
@@ -126,7 +126,7 @@ Successful response fields: same fields as the request.<br>
 <br>
 
 📌 Medicines query.<br>
-✔️ Query service for all medicines registered in the system.<br>
+✔️ Service for querying all medicines registered in the system.<br>
 - Endpoint: HTTP GET ⇒ /medicines<br>
 - Request: no request body or parameters<br>
 - Response: HTTP 200 OK, with a list of medicines<br>
@@ -134,7 +134,7 @@ Successful response fields: same fields as the request.<br>
 <br>
 
 📌 Medication inclusion.<br>
-✔️ New medication registration service.<br>
+✔️ Service for new medication inclusion.<br>
 - Endpoint: HTTP POST ⇒ /medicines<br>
 - Request:<br>
 Request body fields: registerNumber, name, laboratory, dosage, description, price, medicineType<br>
@@ -146,7 +146,7 @@ Successful response fields: same fields as the request<br>
 <br>
 
 📌 Pharmacy stock query.<br>
-✔️ Query service for the stock of medicines in a specific pharmacy.<br>
+✔️ Service for querying the stock of medicines in a specific pharmacy.<br>
 - Endpoint: HTTP GET ⇒ /stocks/{cnpj}<br>
 - Request: no request body or parameters<br>
 - Response: HTTP 200 OK, with a list of medicines in stock at that pharmacy<br>
@@ -155,7 +155,7 @@ Response fields: list with registerNumber, name, quantity, updateDate<br>
 <br>
 
 📌 Acquisition of medicines for pharmacy stock.<br>
-✔️ Inclusion service for medicines in the pharmacy's stock. When the pharmacy purchases medicines from suppliers, the respective quantities must be added to the stock.<br>
+✔️ Service for adding medicines in a pharmacy's stock. When the pharmacy purchases medicines from suppliers, the respective quantities must be added to the stock.<br>
 - Endpoint: HTTP POST ⇒ /stocks<br>
 - Request:<br>
 Request body fields: cnpj, registerNumber, quantity<br>
