@@ -11,85 +11,93 @@ import com.devinhouse.pharmasol.repository.StockRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Service
 public class StockService {
+    private static final Logger logger = LogManager.getLogger(StockService.class);
+
     @Autowired
     private StockRepository stockRepository;
 
     @Autowired
     private PharmacyRepository pharmacyRepository;
+
     @Autowired
     private MedicineRepository medicineRepository;
 
-//  Method to save pharmacies stocks when post mapping (initialization controller)
     @Transactional
-    public void save(Stock stock){
+    public void save(Stock stock) {
         stockRepository.save(stock);
+        logger.info("Pharmacy's stock saved successfully. CNPJ: {}, Register Number: {}", stock.getCnpj(), stock.getRegisterNumber());
     }
 
-//  Method to list all pharmacies stocks when get mapping (stock controller)
     public Optional<List<StockResponse>> getStockByCnpj(Long cnpj) {
         try {
             List<Stock> stockList = stockRepository.findByCnpj(cnpj);
             List<StockResponse> stockResponses = stockList.stream()
                     .map(StockResponse::new)
                     .collect(Collectors.toList());
+            logger.info("Listed all stocks for pharmacy with CNPJ: {}", cnpj);
             return Optional.of(stockResponses);
         } catch (Exception e) {
+            logger.error("Error listing stocks. {}", e.getMessage());
             return Optional.empty();
         }
     }
 
-//  Method to add medicine in a pharmacy's stock when post mapping (stock controller)
     @Transactional
     public Optional<StockResponse> addMedicine(Long cnpj, Integer registerNumber, Integer quantity) {
-//      Validate if obligatory fields are filled
-        validateInput(cnpj, registerNumber, quantity);
+        try {
+            validateInput(cnpj, registerNumber, quantity);
 
-        Optional<Stock> existingStock = stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber);
+            Optional<Stock> existingStock = stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber);
 
-        if (existingStock.isPresent()) {
-            Stock stock = existingStock.get();
-            stock.setQuantity(stock.getQuantity() + quantity);
-            stock.setUpdateDate(LocalDateTime.now());
-            stockRepository.save(stock);
+            if (existingStock.isPresent()) {
+                Stock stock = existingStock.get();
+                stock.setQuantity(stock.getQuantity() + quantity);
+                stock.setUpdateDate(LocalDateTime.now());
+                stockRepository.save(stock);
+                logger.info("Added {} units of medicine to stock for pharmacy with CNPJ: {}, Register Number: {}", quantity, cnpj, registerNumber);
+            } else {
+                createNewStock(cnpj, registerNumber, quantity);
+            }
+
+            return stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber)
+                    .map(StockResponse::new);
+        } catch (Exception e) {
+            logger.error("Error adding medicine to stock. {}", e.getMessage());
+            throw e;
         }
-//      If pharmacy's stock isn't present, create
-        else {
-            createNewStock(cnpj, registerNumber, quantity);
-        }
-
-        return stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber)
-                .map(StockResponse::new);
     }
 
-//  Method to validate if obligatory fields are filled, if pharmacy or medicine exists and if quantity is greater than zero
     private void validateInput(Long cnpj, Integer registerNumber, Integer quantity) {
         if (cnpj == null || registerNumber == null || quantity == null) {
+            logger.error("Validation failed: All fields are mandatory.");
             throw new ValidationException("All fields are mandatory.");
         }
 
         if (!pharmacyRepository.existsByCnpj(cnpj)) {
+            logger.error("Validation failed: Pharmacy with the specified CNPJ does not exist.");
             throw new PharmacyNotFoundException("Pharmacy with the specified CNPJ does not exist.");
         }
 
         if (!medicineRepository.existsByRegisterNumber(registerNumber)) {
+            logger.error("Validation failed: Medicine with the specified register number does not exist.");
             throw new MedicineNotFoundException("Medicine with the specified register number does not exist.");
         }
 
         if (quantity <= 0) {
+            logger.error("Validation failed: Quantity must be a positive number greater than zero.");
             throw new InvalidQuantityException("Quantity must be a positive number greater than zero.");
         }
     }
 
-//  Method to create a new pharmacy's stock if it isn't present
     private void createNewStock(Long cnpj, Integer registerNumber, Integer quantity) {
         Stock newStock = new Stock();
         newStock.setCnpj(cnpj);
@@ -114,111 +122,111 @@ public class StockService {
         newStock.setMedicine(medicine);
 
         stockRepository.save(newStock);
+        logger.info("Created new stock for pharmacy with CNPJ: {}, Register Number: {}", cnpj, registerNumber);
     }
 
-//  Method to sell medicine in a pharmacy's stock when delete mapping (stock controller)
     @Transactional
-    public Optional<StockResponse> sellMedicine(Long cnpj, Integer registerNumber, Integer quantity) throws OutOfStockException {
-        Optional<Stock> existingStock = stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber);
+    public Optional<StockResponse> sellMedicine(Long cnpj, Integer registerNumber, Integer quantity) {
+        try {
+            Optional<Stock> existingStock = stockRepository.findByCnpjAndRegisterNumber(cnpj, registerNumber);
 
-        if (existingStock.isPresent()) {
-            Stock stock = existingStock.get();
-            int newQuantity = stock.getQuantity() - quantity;
+            if (existingStock.isPresent()) {
+                Stock stock = existingStock.get();
+                int newQuantity = stock.getQuantity() - quantity;
 
-            if (newQuantity < 0) {
-                throw new OutOfStockException("Cannot sell more than the available quantity in stock.");
+                if (newQuantity < 0) {
+                    logger.error("Error selling medicine from stock: Cannot sell more than the available quantity in stock.");
+                    throw new OutOfStockException("Cannot sell more than the available quantity in stock.");
+                } else {
+                    if (newQuantity == 0) {
+                        stockRepository.delete(stock);
+                        StockResponse responseAfterDeletion = new StockResponse(
+                                cnpj,
+                                registerNumber,
+                                0,
+                                LocalDateTime.now()
+                        );
+                        logger.info("Sold {} units of medicine from stock for pharmacy with CNPJ: {}, Register Number: {}. Stock deleted.", quantity, cnpj, registerNumber);
+                        return Optional.of(responseAfterDeletion);
+                    } else {
+                        stock.setQuantity(newQuantity);
+                        stock.setUpdateDate(LocalDateTime.now());
+                        stockRepository.save(stock);
+
+                        logger.info("Sold {} units of medicine from stock for pharmacy with CNPJ: {}, Register Number: {}. Updated stock quantity.", quantity, cnpj, registerNumber);
+                        return Optional.of(new StockResponse(
+                                cnpj,
+                                registerNumber,
+                                newQuantity,
+                                stock.getUpdateDate()
+                        ));
+                    }
+                }
             } else {
-                if (newQuantity == 0) {
-//                  If pharmacy's stock reaches zero, it's deleted and a temporary response is shown
-                    stockRepository.delete(stock);
-                    StockResponse responseAfterDeletion = new StockResponse(
-                            cnpj,
-                            registerNumber,
-                            0,
-                            LocalDateTime.now()
-                    );
-                    return Optional.of(responseAfterDeletion);
-                }
-//              If pharmacy's stock doesn't reach zero, medicine quantity and updateDate are updated
-                else {
-                    stock.setQuantity(newQuantity);
-                    stock.setUpdateDate(LocalDateTime.now());
-                    stockRepository.save(stock);
-
-                    return Optional.of(new StockResponse(
-                            cnpj,
-                            registerNumber,
-                            newQuantity,
-                            stock.getUpdateDate()
-                    ));
-                }
+                logger.error("Error selling medicine from stock: There's no existing stock for the specified pharmacy and medicine.");
+                throw new OutOfStockException("There's no existing stock for the specified pharmacy and medicine.");
             }
-        }
-//      If pharmacy's stock isn't present, an error is thrown
-        else {
-            throw new OutOfStockException("There's no existing stock for the specified pharmacy and medicine.");
+        } catch (Exception e) {
+            logger.error("Error selling medicine from stock. {}", e.getMessage());
+            throw e;
         }
     }
 
-//  Method to exchange medicine between two pharmacies stocks when put mapping (stock controller)
     @Transactional
     public Optional<StockResponse> exchangeMedicine(Long cnpjOrigin, Long cnpjDestiny, Integer registerNumber, Integer quantity) {
-        Optional<Stock> existingStockOrigin = stockRepository.findByCnpjAndRegisterNumber(cnpjOrigin, registerNumber);
-        Optional<Stock> existingStockDestiny = stockRepository.findByCnpjAndRegisterNumber(cnpjDestiny, registerNumber);
+        try {
+            Optional<Stock> existingStockOrigin = stockRepository.findByCnpjAndRegisterNumber(cnpjOrigin, registerNumber);
+            Optional<Stock> existingStockDestiny = stockRepository.findByCnpjAndRegisterNumber(cnpjDestiny, registerNumber);
 
-        if (existingStockOrigin.isPresent()) {
-            Stock stockOrigin = existingStockOrigin.get();
-            int newQuantityOrigin = stockOrigin.getQuantity() - quantity;
+            if (existingStockOrigin.isPresent()) {
+                Stock stockOrigin = existingStockOrigin.get();
+                int newQuantityOrigin = stockOrigin.getQuantity() - quantity;
 
-//          If medicine quantity in pharmacy's stock origin is negative, an error is thrown
-            if (newQuantityOrigin < 0) {
-                throw new OutOfStockException("Cannot send more than the available quantity in stock.");
+                if (newQuantityOrigin < 0) {
+                    logger.error("Error exchanging medicine between pharmacies: Cannot send more than the available quantity in stock.");
+                    throw new OutOfStockException("Cannot send more than the available quantity in stock.");
+                } else {
+                    stockOrigin.setQuantity(newQuantityOrigin);
+                    stockOrigin.setUpdateDate(LocalDateTime.now());
+                    stockRepository.save(stockOrigin);
+
+                    Stock stockDestiny;
+                    int newQuantityDestiny;
+
+                    if (existingStockDestiny.isPresent()) {
+                        stockDestiny = existingStockDestiny.get();
+                        newQuantityDestiny = stockDestiny.getQuantity() + quantity;
+                    } else {
+                        stockDestiny = new Stock();
+                        stockDestiny.setCnpj(cnpjDestiny);
+                        stockDestiny.setRegisterNumber(registerNumber);
+                        newQuantityDestiny = quantity;
+                    }
+
+                    stockDestiny.setQuantity(newQuantityDestiny);
+                    stockDestiny.setUpdateDate(LocalDateTime.now());
+                    stockRepository.save(stockDestiny);
+
+                    if (newQuantityOrigin == 0) {
+                        stockRepository.delete(stockOrigin);
+                    }
+
+                    logger.info("Exchanged {} units of medicine between pharmacies. Origin CNPJ: {}, Destiny CNPJ: {}, Register Number: {}", quantity, cnpjOrigin, cnpjDestiny, registerNumber);
+                    return Optional.of(new StockResponse(
+                            registerNumber,
+                            cnpjOrigin,
+                            newQuantityOrigin,
+                            cnpjDestiny,
+                            newQuantityDestiny
+                    ));
+                }
+            } else {
+                logger.error("Error exchanging medicine between pharmacies: There's no existing stock for the specified pharmacy and medicine.");
+                throw new OutOfStockException("There's no existing stock for the specified pharmacy and medicine.");
             }
-//          If medicine quantity in pharmacy's stock origin is not negative or reaches zero, medicine quantity and updateDate are updated
-            else {
-                stockOrigin.setQuantity(newQuantityOrigin);
-                stockOrigin.setUpdateDate(LocalDateTime.now());
-                stockRepository.save(stockOrigin);
-
-                Stock stockDestiny;
-                int newQuantityDestiny;
-
-//              If pharmacy's stock destiny is present, add medicine quantity exchanged from pharmacy's stock origin
-                if (existingStockDestiny.isPresent()) {
-                    stockDestiny = existingStockDestiny.get();
-                    newQuantityDestiny = stockDestiny.getQuantity() + quantity;
-                }
-//              If pharmacy's stock destiny is not present, create
-                else {
-                    stockDestiny = new Stock();
-                    stockDestiny.setCnpj(cnpjDestiny);
-                    stockDestiny.setRegisterNumber(registerNumber);
-                    newQuantityDestiny = quantity;
-                }
-
-//              Medicine quantity and updateDate from pharmacy's stock destiny are updated
-                stockDestiny.setQuantity(newQuantityDestiny);
-                stockDestiny.setUpdateDate(LocalDateTime.now());
-                stockRepository.save(stockDestiny);
-
-//              If medicine quantity in pharmacy's stock origin reaches zero, it's deleted
-                if (newQuantityOrigin == 0) {
-                    stockRepository.delete(stockOrigin);
-                }
-
-//              If exchange medicine method is successful, a response is shown
-                return Optional.of(new StockResponse(
-                        registerNumber,
-                        cnpjOrigin,
-                        newQuantityOrigin,
-                        cnpjDestiny,
-                        newQuantityDestiny
-                ));
-            }
-        }
-//     If pharmacy's stock origin isn't present, an error is shown
-        else {
-            throw new OutOfStockException("There's no existing stock for the specified pharmacy and medicine.");
+        } catch (Exception e) {
+            logger.error("Error exchanging medicine between pharmacies. {}", e.getMessage());
+            throw e;
         }
     }
 }
