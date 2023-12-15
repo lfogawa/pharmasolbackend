@@ -48,7 +48,7 @@
 </p>
 
 <p align="justify">
-The "PharmaSol" system, short for "pharmacy solutions," was created with the aim of assisting pharmaceutical companies in managing data related to pharmacies, stocks, and medicines. The technologies used (Java, Spring, Maven, and PostgreSQL) were intended to facilitate the administration and maintenance of this information, coupled with good performance.<br>
+The "PharmaSol" system, short for "pharmacy solutions," was created with the aim of assisting pharmaceutical companies in managing data related to pharmacies, stocks, and medicines. The technologies used (Java, Spring, Maven, Log4j and PostgreSQL) were intended to facilitate the administration and maintenance of this information, coupled with good performance.<br>
 
 In the system, it is possible to:
 - initiate the database with pre-existing data for pharmacies, medicines, and stocks;<br>
@@ -64,7 +64,7 @@ In the system, it is possible to:
 </p>
 
 <p align="justify">
-O sistema "PharmaSol", abreviação de "soluções para farmácias", foi criado com o objetivo de auxiliar empresas farmacêuticas na gestão de dados envolvendo farmácias, estoques e medicamentos. As tecnologias utilizadas (Java, Spring, Maven e PostgreSQL) tiveram como finalidade realizar uma administração e uma manutenção facilitada dessas informações, aliada a uma boa perfomance.<br>
+O sistema "PharmaSol", abreviação de "soluções para farmácias", foi criado com o objetivo de auxiliar empresas farmacêuticas na gestão de dados envolvendo farmácias, estoques e medicamentos. As tecnologias utilizadas (Java, Spring, Maven, Log4j e PostgreSQL) tiveram como finalidade realizar uma administração e uma manutenção facilitada dessas informações, aliada a uma boa perfomance.<br>
 
 No sistema, é possível:<br>
 - iniciar o banco com dados prévios de farmácias, medicamentos e estoques; <br>
@@ -312,8 +312,8 @@ Campos de response com sucesso: registerNumber, cnpjOrigin, quantityOrigin, cnpj
   EN-US
 </p>
 
+🔨 Improve Apache Log4j implementation<br>
 🔨 Implement authentication and authorization with Spring Security and JWT Tokens<br>
-🔨 Implement documentation with Apache Log4j<br>
 🔨 Implement pharmacy deletion functionality<br>
 🔨 Implement medicine deletion functionality<br>
 🔨 Thoroughly review the code, ensuring alignment with best practices and addressing it<br>
@@ -323,8 +323,8 @@ Campos de response com sucesso: registerNumber, cnpjOrigin, quantityOrigin, cnpj
   PT-BR
 </p>
 
+🔨 Melhorar a implementação do Apache Log4j<br>
 🔨 Implementar autenticação e autorização com Spring Security e tokens JWT<br>
-🔨 Implementar documentação com apache log4j<br>
 🔨 Implementar a funcionalidade de deleção de farmácia<br>
 🔨 Implementar a funcionalidade de deleção de medicamento<br>
 🔨 Revisar profundamente o código, analisando se está de acordo com as boas práticas e corrigindo-o<br>
